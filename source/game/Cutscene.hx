@@ -1,5 +1,6 @@
 package game;
 
+import modding.ModAssets;
 import lime.utils.Assets;
 import haxe.Json;
 
@@ -86,7 +87,7 @@ class CutsceneUtil
     {
         var rawJson:String = "";
 
-        rawJson = Assets.getText(Paths.json("cutscenes/" + jsonPath)).trim();
+        rawJson = ModAssets.get_text(Paths.json("cutscenes/" + jsonPath)).trim();
 
         return parseJSONshit(rawJson);
     }

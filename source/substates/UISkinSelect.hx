@@ -1,5 +1,6 @@
 package substates;
 
+import modding.ModAssets;
 import states.LoadingState;
 import flixel.graphics.frames.FlxAtlasFrames;
 import lime.utils.Assets;
@@ -128,7 +129,7 @@ class UISkinSelect extends MusicBeatSubstate
         mania_size = CoolUtil.coolTextFile(Paths.txt("ui skins/" + ui_Skin + "/maniasize"));
 		mania_offset = CoolUtil.coolTextFile(Paths.txt("ui skins/" + ui_Skin + "/maniaoffset"));
 
-        if(Assets.exists(Paths.txt("ui skins/" + ui_Skin + "/maniagap")))
+        if(ModAssets.exists(Paths.txt("ui skins/" + ui_Skin + "/maniagap")))
 			mania_gap = CoolUtil.coolTextFile(Paths.txt("ui skins/" + ui_Skin + "/maniagap"));
 		else
 			mania_gap = CoolUtil.coolTextFile(Paths.txt("ui skins/default/maniagap"));

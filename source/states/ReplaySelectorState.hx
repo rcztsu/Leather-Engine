@@ -1,5 +1,6 @@
 package states;
 
+import modding.ModAssets;
 import lime.app.Application;
 import openfl.Assets;
 import ui.Alphabet;
@@ -56,7 +57,7 @@ class ReplaySelectorState extends MusicBeatState
 
             var poop:String = Highscore.formatSong(replay.song, replay.difficulty);
 
-            if(Assets.exists(Paths.json("song data/" + replay.song.toLowerCase() + "/" + poop)))
+            if(ModAssets.exists(Paths.json("song data/" + replay.song.toLowerCase() + "/" + poop)))
             {
                 PlayState.SONG = Song.loadFromJson(poop, replay.song);
                 PlayState.isStoryMode = false;

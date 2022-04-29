@@ -23,8 +23,10 @@ import states.PlayState;
 import lime.utils.Assets;
 import flixel.system.FlxSound;
 import utilities.CoolUtil;
+#if polymod
 import polymod.Polymod;
 import polymod.backends.PolymodAssets;
+#end
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import llua.Lua.Lua_helper;
@@ -173,7 +175,7 @@ class ModchartUtilities
         Lua.init_callbacks(lua);
 
         if(path == null)
-            path = PolymodAssets.getPath(Paths.lua("modcharts/" + PlayState.SONG.modchartPath));
+            path = ModAssets.get_path(Paths.lua("modcharts/" + PlayState.SONG.modchartPath));
 
         var result = LuaL.dofile(lua, path); // execute le file
 
@@ -252,9 +254,9 @@ class ModchartUtilities
 			var string_arg_1:String = Std.string(argument_1);
 			var string_arg_2:String = Std.string(argument_2);
 
-            if(!PlayState.instance.event_luas.exists(event_name.toLowerCase()) && Assets.exists(Paths.lua("event data/" + event_name.toLowerCase())))
+            if(!PlayState.instance.event_luas.exists(event_name.toLowerCase()) && ModAssets.exists(Paths.lua("event data/" + event_name.toLowerCase())))
             {
-                PlayState.instance.event_luas.set(event_name.toLowerCase(), ModchartUtilities.createModchartUtilities(PolymodAssets.getPath(Paths.lua("event data/" + event_name.toLowerCase()))));
+                PlayState.instance.event_luas.set(event_name.toLowerCase(), ModchartUtilities.createModchartUtilities(ModAssets.get_path(Paths.lua("event data/" + event_name.toLowerCase()))));
                 PlayState.instance.generatedSomeDumbEventLuas = true;
             }
 
@@ -305,7 +307,7 @@ class ModchartUtilities
 
                 @:privateAccess
                 if(filename != null && filename.length > 0)
-                    Sprite.loadGraphic(Paths.image(PlayState.instance.stage.stage + "/" + filename, "stages"));
+                    Sprite.loadGraphic(ModAssets.get_image(Paths.image(PlayState.instance.stage.stage + "/" + filename, "stages")));
 
                 Sprite.setGraphicSize(Std.int(Sprite.width * size));
                 Sprite.updateHitbox();
@@ -399,7 +401,7 @@ class ModchartUtilities
                 var Sprite:FlxSprite = new FlxSprite(x, y);
 
                 if(filename != null && filename.length > 0)
-                    Sprite.loadGraphic(Paths.image(filename));
+                    Sprite.loadGraphic(ModAssets.get_image(Paths.image(filename)));
 
                 Sprite.setGraphicSize(Std.int(Sprite.width * size));
                 Sprite.updateHitbox();

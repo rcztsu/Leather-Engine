@@ -1,5 +1,6 @@
 package game;
 
+import modding.ModAssets;
 import flixel.FlxG;
 import lime.utils.Assets;
 import haxe.Json;
@@ -95,9 +96,9 @@ class Replay
 		var rawJson:String = "";
 
         #if sys
-        if(Assets.exists(Paths.json(replayFile, "replays")))
+        if(ModAssets.exists(Paths.json(replayFile, "replays")))
         #end
-            rawJson = Assets.getText(Paths.json(replayFile, "replays")).trim();
+            rawJson = ModAssets.get_text(Paths.json(replayFile, "replays")).trim();
         #if sys
         else
             rawJson = sys.io.File.getContent(Sys.getCwd() + "assets/replays/" + replayFile + ".json").trim();
@@ -149,7 +150,7 @@ class Replay
             }
         }
 
-        var modList = modding.ModList.getActiveMods(modding.PolymodHandler.metadataArrays);
+        var modList:Array<String> = modding.ModList.getActiveMods();
         
         if(modList.length > 0)
         {

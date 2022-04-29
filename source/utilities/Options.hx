@@ -1,5 +1,6 @@
 package utilities;
 
+import modding.ModAssets;
 import haxe.Json;
 import openfl.Assets;
 import flixel.util.FlxSave;
@@ -36,7 +37,7 @@ class Options
         createSave("autosave", "autosave");
         createSave("modlist", "modlist");
 
-        defaultOptions = Json.parse(Assets.getText(Paths.json("defaultOptions")));
+        defaultOptions = Json.parse(ModAssets.get_text(Paths.json("defaultOptions")));
 
         for(option in defaultOptions.options)
         {

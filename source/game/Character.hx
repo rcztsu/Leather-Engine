@@ -1,5 +1,6 @@
 package game;
 
+import modding.ModAssets;
 import animateatlas.AtlasFrameMaker;
 import utilities.Options;
 import flixel.FlxG;
@@ -313,16 +314,16 @@ class Character extends FlxSprite
 
 	function loadNamedConfiguration(characterName:String)
 	{
-		if(!Assets.exists(Paths.json("character data/" + characterName + "/config")))
+		if(!ModAssets.exists(Paths.json("character data/" + characterName + "/config")))
 		{
 			characterName = "bf";
 			curCharacter = characterName;
 		}
 
-		if(Assets.exists(Paths.json("character data/optimized_" + characterName + "/config")) && Options.getData("optimizedChars"))
+		if(ModAssets.exists(Paths.json("character data/optimized_" + characterName + "/config")) && Options.getData("optimizedChars"))
 			characterName = "optimized_" + characterName;
 
-		var rawJson = Assets.getText(Paths.json("character data/" + characterName + "/config")).trim();
+		var rawJson = ModAssets.get_text(Paths.json("character data/" + characterName + "/config")).trim();
 
 		var config:CharacterConfig = cast Json.parse(rawJson);
 
@@ -360,9 +361,9 @@ class Character extends FlxSprite
 
 			dancesLeftAndRight = config.dancesLeftAndRight;
 
-			if(Assets.exists(Paths.file("images/characters/" + config.imagePath + ".txt", TEXT, "shared")))
+			if(ModAssets.exists(Paths.file("images/characters/" + config.imagePath + ".txt", TEXT, "shared")))
 				frames = Paths.getPackerAtlas('characters/' + config.imagePath, 'shared');
-			else if(Assets.exists(Paths.file("images/characters/" + config.imagePath + "/Animation.json", TEXT, "shared")))
+			else if(ModAssets.exists(Paths.file("images/characters/" + config.imagePath + "/Animation.json", TEXT, "shared")))
 				frames = AtlasFrameMaker.construct("characters/" + config.imagePath);
 			else
 				frames = Paths.getSparrowAtlas('characters/' + config.imagePath, 'shared');
@@ -476,7 +477,7 @@ class Character extends FlxSprite
 	{
 		animOffsets = new Map<String, Array<Dynamic>>();
 		
-		if(Assets.exists(Paths.txt("character data/" + characterName + "/" + "offsets")))
+		if(ModAssets.exists(Paths.txt("character data/" + characterName + "/" + "offsets")))
 		{
 			var offsets:Array<String> = CoolUtil.coolTextFile(Paths.txt("character data/" + characterName + "/" + "offsets"));
 

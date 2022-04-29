@@ -1,12 +1,15 @@
 package;
 
+import modding.ModAssets;
 import lime.utils.AssetType as LimeAssetType;
 import lime.utils.Assets;
 import flixel.graphics.FlxGraphic;
 #if sys
 import sys.io.File;
 import sys.FileSystem;
+#if polymod
 import polymod.backends.PolymodAssets;
+#end
 #end
 import openfl.display.BitmapData;
 import flixel.FlxG;
@@ -111,7 +114,7 @@ class Paths
 	{
 		if(difficulty != null)
 		{
-			if(Assets.exists('songs:assets/songs/${song.toLowerCase()}/Voices-$difficulty.$SOUND_EXT'))
+			if(ModAssets.exists('songs:assets/songs/${song.toLowerCase()}/Voices-$difficulty.$SOUND_EXT'))
 			{
 				return 'songs:assets/songs/${song.toLowerCase()}/Voices-$difficulty.$SOUND_EXT';
 			}
@@ -124,7 +127,7 @@ class Paths
 	{
 		if(difficulty != null)
 		{
-			if(Assets.exists('songs:assets/songs/${song.toLowerCase()}/Inst-$difficulty.$SOUND_EXT'))
+			if(ModAssets.exists('songs:assets/songs/${song.toLowerCase()}/Inst-$difficulty.$SOUND_EXT'))
 				return 'songs:assets/songs/${song.toLowerCase()}/Inst-$difficulty.$SOUND_EXT';
 		}
 		
@@ -135,7 +138,7 @@ class Paths
 	{
 		if(difficulty != null)
 		{
-			if(Assets.exists(Paths.json("song data/" + song.toLowerCase() + '/events-${difficulty.toLowerCase()}')))
+			if(ModAssets.exists(Paths.json("song data/" + song.toLowerCase() + '/events-${difficulty.toLowerCase()}')))
 				return Paths.json("song data/" + song.toLowerCase() + '/events-${difficulty.toLowerCase()}');
 		}
 
@@ -154,16 +157,16 @@ class Paths
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)
 	{
-		if(Assets.exists(file('images/$key.xml', library)))
-			return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$key.xml', library));
+		if(ModAssets.exists(file('images/$key.xml', library)))
+			return FlxAtlasFrames.fromSparrow(ModAssets.get_image(image(key, library)), ModAssets.get_text(file('images/$key.xml', library)));
 		else
 			return FlxAtlasFrames.fromSparrow(image("Bind_Menu_Assets", "preload"), file('images/Bind_Menu_Assets.xml', "preload"));
 	}
 
 	inline static public function getPackerAtlas(key:String, ?library:String)
 	{
-		if(Assets.exists(file('images/$key.txt', library)))
-			return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
+		if(ModAssets.exists(file('images/$key.txt', library)))
+			return FlxAtlasFrames.fromSpriteSheetPacker(ModAssets.get_image(image(key, library)), ModAssets.get_text(file('images/$key.txt', library)));
 		else
 			return FlxAtlasFrames.fromSparrow(image("Bind_Menu_Assets", "preload"), file('images/Bind_Menu_Assets.xml', "preload"));
 	}

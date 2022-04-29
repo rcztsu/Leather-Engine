@@ -1,4 +1,5 @@
 package animateatlas;
+import modding.ModAssets;
 import flixel.util.FlxDestroyUtil;
 import openfl.geom.Rectangle;
 import flixel.math.FlxPoint;
@@ -45,15 +46,15 @@ class AtlasFrameMaker extends FlxFramesCollection
 		var frameCollection:FlxFramesCollection;
 		var frameArray:Array<Array<FlxFrame>> = [];
 
-		if (Assets.exists('assets/${library != "preload" ? '$library/' : ""}images/$key/spritemap1.json', TEXT))
+		if (ModAssets.exists('assets/${library != "preload" ? '$library/' : ""}images/$key/spritemap1.json'))
 		{
 			//PlayState.instance.addTextToDebug("Only Spritemaps made with Adobe Animate 2018 are supported");
 			trace("Only Spritemaps made with Adobe Animate 2018 are supported");
 			return null;
 		}
 
-		var animationData:AnimationData = Json.parse(Assets.getText('assets/${library != "preload" ? '$library/' : ""}images/$key/Animation.json'));
-		var atlasData:AtlasData = Json.parse(Assets.getText('assets/${library != "preload" ? '$library/' : ""}images/$key/spritemap.json').replace("\uFEFF", ""));
+		var animationData:AnimationData = Json.parse(ModAssets.get_text('assets/${library != "preload" ? '$library/' : ""}images/$key/Animation.json'));
+		var atlasData:AtlasData = Json.parse(ModAssets.get_text('assets/${library != "preload" ? '$library/' : ""}images/$key/spritemap.json').replace("\uFEFF", ""));
 
 		var graphic:FlxGraphic = FlxGraphic.fromAssetKey(Paths.image('$key/spritemap'));
 		var ss:SpriteAnimationLibrary = new SpriteAnimationLibrary(animationData, atlasData, graphic.bitmap);

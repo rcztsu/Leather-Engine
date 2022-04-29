@@ -1,5 +1,6 @@
 package game;
 
+import modding.ModAssets;
 #if polymod
 import polymod.backends.PolymodAssets;
 #end
@@ -91,7 +92,7 @@ class StageGroup extends FlxGroup
             {
                 var JSON_Data:String = "";
     
-                JSON_Data = Assets.getText(Paths.json("stage data/" + stage)).trim();
+                JSON_Data = ModAssets.get_text(Paths.json("stage data/" + stage)).trim();
                 stage_Data = cast Json.parse(JSON_Data);
             }
         }
@@ -345,8 +346,8 @@ class StageGroup extends FlxGroup
                                     Sprite.animation.play(Object.start_Animation);
                             }
                             else
-                                Sprite.loadGraphic(Paths.image(stage + "/" + Object.file_Name, "stages"));
-        
+                                Sprite.loadGraphic(ModAssets.get_image(Paths.image(stage + "/" + Object.file_Name, "stages")));
+
                             if(Object.uses_Frame_Width)
                                 Sprite.setGraphicSize(Std.int(Sprite.frameWidth * Object.scale));
                             else
@@ -382,13 +383,11 @@ class StageGroup extends FlxGroup
     public function createLuaStuff()
     {
         #if linc_luajit
-        #if polymod // change this in future whenever custom backend
         if(stage_Data != null)
         {
-            if(stage_Data.scriptName != null && Assets.exists(Paths.lua("stage data/" + stage_Data.scriptName)))
-                stageScript = ModchartUtilities.createModchartUtilities(PolymodAssets.getPath(Paths.lua("stage data/" + stage_Data.scriptName)));
+            if(stage_Data.scriptName != null && ModAssets.exists(Paths.lua("stage data/" + stage_Data.scriptName)))
+                stageScript = ModchartUtilities.createModchartUtilities(ModAssets.get_path(Paths.lua("stage data/" + stage_Data.scriptName)));
         }
-        #end
         #end
     }
 

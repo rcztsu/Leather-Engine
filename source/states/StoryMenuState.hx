@@ -1,5 +1,6 @@
 package states;
 
+import modding.ModAssets;
 import substates.ResetScoreSubstate;
 #if discord_rpc
 import utilities.Discord.DiscordClient;
@@ -451,7 +452,7 @@ class StoryMenuState extends MusicBeatState
 
 	function loadJSON(name:String)
 	{
-		groups.push(cast Json.parse(Assets.getText(Paths.json("week data/" + name))));
+		groups.push(cast Json.parse(ModAssets.get_text(Paths.json("week data/" + name))));
 	}
 
 	function loadGroups()

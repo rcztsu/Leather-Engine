@@ -1,8 +1,7 @@
 package ui;
 
 #if sys
-import sys.io.File;
-import openfl.display.BitmapData;
+import modding.ModAssets;
 import flixel.FlxSprite;
 
 class ModIcon extends FlxSprite
@@ -12,14 +11,15 @@ class ModIcon extends FlxSprite
 	 */
 	public var sprTracker:FlxSprite;
 
+	public var _modId:String = 'Template Mod';
+
 	public function new(modId:String = 'Template Mod')
 	{
 		super();
 
-		var imageDataRaw = File.getBytes(Sys.getCwd() + "mods/" + modId + "/_polymod_icon.png");
-		var graphicData = BitmapData.fromBytes(imageDataRaw);
+		_modId = modId;
 
-		loadGraphic(graphicData, false, 0, 0, false, modId);
+		loadGraphic(ModAssets.get_image("_polymod_icon", modId), false, 0, 0);
 
 		setGraphicSize(150, 150);
 		updateHitbox();
@@ -34,6 +34,13 @@ class ModIcon extends FlxSprite
 
 		if (sprTracker != null)
 			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
+	}
+
+	override public function destroy()
+	{
+		ModAssets.clear_image(_modId + ":_polymod_icon");
+
+		super.destroy();
 	}
 }
 #end

@@ -1,11 +1,11 @@
 package ui;
 
+import modding.ModAssets;
 import states.StoryMenuState;
 import flixel.graphics.frames.FlxFramesCollection;
 import lime.utils.Assets;
 #if sys
 import sys.io.File;
-import polymod.backends.PolymodAssets;
 #end
 import haxe.Json;
 import flixel.FlxSprite;
@@ -33,7 +33,7 @@ class MenuCharacter extends FlxSprite
 			if(animation.curAnim != null)
 				animation.curAnim.stop();
 	
-			characterData = cast Json.parse(Assets.getText(Paths.json("menu character data/" + character)));
+			characterData = cast Json.parse(ModAssets.get_text(Paths.json("menu character data/" + character)));
 	
 			frames = Paths.getSparrowAtlas('campaign menu/characters/' + characterData.File_Name);
 	

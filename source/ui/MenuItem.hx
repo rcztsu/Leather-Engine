@@ -1,8 +1,5 @@
 package ui;
 
-#if sys
-import polymod.backends.PolymodAssets;
-#end
 import openfl.display.BitmapData;
 import lime.utils.Assets;
 import flixel.FlxG;

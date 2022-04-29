@@ -1,9 +1,9 @@
 package states;
 
 #if sys
+import modding.ModHandler;
 import ui.ModIcon;
 import modding.ModList;
-import modding.PolymodHandler;
 import substates.UISkinSelect;
 import substates.ControlMenuSubstate;
 import modding.CharacterCreationState;
@@ -69,7 +69,7 @@ class ModsMenu extends MusicBeatState
 		if(FlxG.sound.music == null)
 			FlxG.sound.playMusic(MusicUtilities.GetOptionsMenuMusic(), 0.7, true);
 
-		PolymodHandler.loadModMetadata();
+		ModHandler.load_mod_metadata();
 
 		loadMods();
 
@@ -108,7 +108,7 @@ class ModsMenu extends MusicBeatState
 
 		var optionLoopNum:Int = 0;
 
-		for(modId in PolymodHandler.metadataArrays)
+		for(modId in ModHandler.all_mods)
 		{
 			var modOption = new ModOption(ModList.modMetadatas.get(modId).title, modId, optionLoopNum);
 			page.add(modOption);
@@ -140,7 +140,7 @@ class ModsMenu extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			PolymodHandler.loadMods();
+			ModHandler.load_all();
 			FlxG.switchState(new MainMenuState());
 		}
 

@@ -1,5 +1,6 @@
 package debuggers;
 
+import modding.ModAssets;
 import flixel.FlxObject;
 import states.TitleState;
 import game.EventSprite;
@@ -916,22 +917,31 @@ class ChartingState extends MusicBeatState
 	function loadSong(daSong:String):Void
 	{
 		if (FlxG.sound.music != null)
-			FlxG.sound.music.stop();
+			FlxG.sound.music.destroy();
 
 		if (vocals != null)
-			vocals.stop();
+			vocals.destroy();
 
-		if(openfl.Assets.cache.hasSound(Paths.inst(daSong, difficulty.toLowerCase())))
-			openfl.Assets.cache.removeSound(Paths.inst(daSong, difficulty.toLowerCase()));
+		ModAssets.sound_cache.clear();
 
-		if(openfl.Assets.cache.hasSound(Paths.voices(daSong, difficulty.toLowerCase())))
-			openfl.Assets.cache.removeSound(Paths.voices(daSong, difficulty.toLowerCase()));
-
+		#if sys
+		FlxG.sound.music = new FlxSound().loadEmbedded(ModAssets.get_sound(Paths.inst(daSong, difficulty.toLowerCase())));
+		#else
 		FlxG.sound.music = new FlxSound().loadEmbedded(Paths.inst(daSong, difficulty.toLowerCase()));
-		FlxG.sound.music.persist = true;
+		#end
+
+		FlxG.sound.music.persist = false;
 		
 		if (_song.needsVoices)
+		{
+			#if sys
+			vocals = new FlxSound().loadEmbedded(ModAssets.get_sound(Paths.voices(daSong, difficulty.toLowerCase())));
+			#else
 			vocals = new FlxSound().loadEmbedded(Paths.voices(daSong, difficulty.toLowerCase()));
+			#end
+
+			vocals.persist = false;
+		}
 		else
 			vocals = new FlxSound();
 
@@ -1646,12 +1656,12 @@ class ChartingState extends MusicBeatState
 
 		var path:String = Paths.json(characterPath);
 
-		if(!Assets.exists(path) && !Assets.exists(Paths.image("icons/" + char, "preload")))
+		if(!ModAssets.exists(path) && !ModAssets.exists(Paths.image("icons/" + char, "preload")))
 			path = Paths.json('character data/bf/config');
-		else if(!Assets.exists(path) && Assets.exists(Paths.image("icons/" + char, "preload")))
+		else if(!ModAssets.exists(path) && ModAssets.exists(Paths.image("icons/" + char, "preload")))
 			return char;
 
-		var rawJson = Assets.getText(path).trim();
+		var rawJson = ModAssets.get_text(path).trim();
 
 		var json:CharacterConfig = cast Json.parse(rawJson);
 

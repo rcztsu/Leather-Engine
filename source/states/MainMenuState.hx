@@ -1,5 +1,6 @@
 package states;
 
+import modding.ModHandler;
 import flixel.util.FlxTimer;
 import game.Replay;
 import utilities.MusicUtilities;
@@ -19,7 +20,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import lime.app.Application;
-import modding.PolymodHandler;
 
 using StringTools;
 
@@ -36,7 +36,7 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
-		if(PolymodHandler.metadataArrays.length > 0)
+		if(ModHandler.all_mods.length > 0)
 			optionShit.push('mods');
 
 		if(Replay.getReplayList().length > 0)
@@ -247,4 +247,13 @@ class MainMenuState extends MusicBeatState
 			spr.updateHitbox();
 		});
 	}
+
+	#if sys
+	override public function destroy()
+	{
+		modding.ModAssets.clear_caches();
+
+		super.destroy();
+	}
+	#end
 }

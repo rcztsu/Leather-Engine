@@ -1,5 +1,6 @@
 package states;
 
+import modding.ModAssets;
 #if sys
 import sys.FileSystem;
 #end
@@ -352,7 +353,7 @@ class PlayState extends MusicBeatState
 		binds = NoteHandler.getBinds(SONG.playerKeyCount);
 
 		if (FlxG.sound.music != null)
-			FlxG.sound.music.stop();
+			FlxG.sound.music.destroy();
 
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
@@ -444,7 +445,7 @@ class PlayState extends MusicBeatState
 		mania_size = CoolUtil.coolTextFile(Paths.txt("ui skins/" + SONG.ui_Skin + "/maniasize"));
 		mania_offset = CoolUtil.coolTextFile(Paths.txt("ui skins/" + SONG.ui_Skin + "/maniaoffset"));
 
-		if(Assets.exists(Paths.txt("ui skins/" + SONG.ui_Skin + "/maniagap")))
+		if(ModAssets.exists(Paths.txt("ui skins/" + SONG.ui_Skin + "/maniagap")))
 			mania_gap = CoolUtil.coolTextFile(Paths.txt("ui skins/" + SONG.ui_Skin + "/maniagap"));
 		else
 			mania_gap = CoolUtil.coolTextFile(Paths.txt("ui skins/default/maniagap"));
@@ -697,7 +698,7 @@ class PlayState extends MusicBeatState
 	
 			if(executeModchart)
 			{
-				if(Assets.exists(Paths.lua("modcharts/" + PlayState.SONG.modchartPath)))
+				if(ModAssets.exists(Paths.lua("modcharts/" + PlayState.SONG.modchartPath)))
 				{
 					luaModchart = ModchartUtilities.createModchartUtilities();
 					executeALuaState("create", [PlayState.SONG.song.toLowerCase()], MODCHART);
@@ -937,11 +938,11 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if(Assets.exists(Paths.songEvents(SONG.song.toLowerCase(), storyDifficultyStr.toLowerCase())) && !chartingMode)
+			if(ModAssets.exists(Paths.songEvents(SONG.song.toLowerCase(), storyDifficultyStr.toLowerCase())) && !chartingMode)
 			{
 				trace(Paths.songEvents(SONG.song.toLowerCase(), storyDifficultyStr.toLowerCase()));
 
-				var eventFunnies:Array<Array<Dynamic>> = Song.parseJSONshit(Assets.getText(Paths.songEvents(SONG.song.toLowerCase(), storyDifficultyStr.toLowerCase()))).events;
+				var eventFunnies:Array<Array<Dynamic>> = Song.parseJSONshit(ModAssets.get_text(Paths.songEvents(SONG.song.toLowerCase(), storyDifficultyStr.toLowerCase()))).events;
 
 				for(event in eventFunnies)
 				{
@@ -1006,9 +1007,9 @@ class PlayState extends MusicBeatState
 				}
 
 				#if linc_luajit
-				if(!event_luas.exists(event[0].toLowerCase()) && Assets.exists(Paths.lua("event data/" + event[0].toLowerCase())))
+				if(!event_luas.exists(event[0].toLowerCase()) && ModAssets.exists(Paths.lua("event data/" + event[0].toLowerCase())))
 				{
-					event_luas.set(event[0].toLowerCase(), ModchartUtilities.createModchartUtilities(PolymodAssets.getPath(Paths.lua("event data/" + event[0].toLowerCase()))));
+					event_luas.set(event[0].toLowerCase(), ModchartUtilities.createModchartUtilities(ModAssets.get_path(Paths.lua("event data/" + event[0].toLowerCase()))));
 					generatedSomeDumbEventLuas = true;
 				}
 				#end
@@ -1175,7 +1176,7 @@ class PlayState extends MusicBeatState
 		}
 		
 		var foundFile:Bool = false;
-		var fileName:String = #if sys Sys.getCwd() + PolymodAssets.getPath(Paths.video(name, ext)) #else Paths.video(name, ext) #end;
+		var fileName:String = #if sys Sys.getCwd() + ModAssets.get_path(Paths.video(name, ext)) #else Paths.video(name, ext) #end;
 
 		#if sys
 		if(FileSystem.exists(fileName)) {
@@ -1474,20 +1475,30 @@ class PlayState extends MusicBeatState
 		curSong = songData.song;
 
 		if (SONG.needsVoices)
+		{
+			#if sys
+			vocals = new FlxSound().loadEmbedded(ModAssets.get_sound(Paths.voices(PlayState.SONG.song, (SONG.specialAudioName == null ? storyDifficultyStr.toLowerCase() : SONG.specialAudioName))));
+			vocals.persist = false;
+			#else
 			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, (SONG.specialAudioName == null ? storyDifficultyStr.toLowerCase() : SONG.specialAudioName)));
+			#end
+
+			FlxG.sound.list.add(vocals);
+		}
 		else
 			vocals = new FlxSound();
 
 		// LOADING MUSIC FOR CUSTOM SONGS
 		if(FlxG.sound.music != null)
-			if(FlxG.sound.music.active)
-				FlxG.sound.music.stop();
+			FlxG.sound.music.destroy();
 
+		#if sys
+		FlxG.sound.music = new FlxSound().loadEmbedded(ModAssets.get_sound(Paths.inst(SONG.song, (SONG.specialAudioName == null ? storyDifficultyStr.toLowerCase() : SONG.specialAudioName))));
+		#else
 		FlxG.sound.music = new FlxSound().loadEmbedded(Paths.inst(SONG.song, (SONG.specialAudioName == null ? storyDifficultyStr.toLowerCase() : SONG.specialAudioName)));
-		FlxG.sound.music.persist = true;
+		#end
 
-		vocals.persist = false;
-		FlxG.sound.list.add(vocals);
+		FlxG.sound.music.persist = false;
 
 		notes = new FlxTypedGroup<Note>();
 
@@ -4576,9 +4587,9 @@ class PlayState extends MusicBeatState
 		}
 
 		#if linc_luajit
-		if(!event_luas.exists(event[0].toLowerCase()) && Assets.exists(Paths.lua("event data/" + event[0].toLowerCase())))
+		if(!event_luas.exists(event[0].toLowerCase()) && ModAssets.exists(Paths.lua("event data/" + event[0].toLowerCase())))
 		{
-			event_luas.set(event[0].toLowerCase(), ModchartUtilities.createModchartUtilities(PolymodAssets.getPath(Paths.lua("event data/" + event[0].toLowerCase()))));
+			event_luas.set(event[0].toLowerCase(), ModchartUtilities.createModchartUtilities(ModAssets.get_path(Paths.lua("event data/" + event[0].toLowerCase()))));
 			generatedSomeDumbEventLuas = true;
 		}
 		#end
@@ -4602,6 +4613,15 @@ class PlayState extends MusicBeatState
 	{
 		ratingStr = Ratings.getRank(accuracy, misses);
 	}
+
+	#if sys
+	override public function destroy()
+	{
+		modding.ModAssets.clear_caches();
+
+		super.destroy();
+	}
+	#end
 }
 
 enum Execute_On

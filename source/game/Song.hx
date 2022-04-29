@@ -1,5 +1,6 @@
 package game;
 
+import modding.ModAssets;
 import utilities.NoteVariables;
 import game.Section.SwagSection;
 import haxe.Json;
@@ -96,7 +97,11 @@ class Song
 
 		var rawJson:String = "";
 
+		#if sys
+		rawJson = ModAssets.get_text(Paths.json(folder.toLowerCase() + jsonInput.toLowerCase())).trim();
+		#else
 		rawJson = Assets.getText(Paths.json(folder.toLowerCase() + jsonInput.toLowerCase())).trim();
+		#end
 
 		if(rawJson != "")
 		{

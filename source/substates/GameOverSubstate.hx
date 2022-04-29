@@ -1,5 +1,6 @@
 package substates;
 
+import modding.ModAssets;
 import lime.utils.Assets;
 import game.Replay;
 import states.ReplaySelectorState;
@@ -56,7 +57,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		var soundPath = Paths.sound("deaths/bf-dead/death");
 
-		if(Assets.exists(Paths.sound("deaths/" + bf.curCharacter + "/death")))
+		if(ModAssets.exists(Paths.sound("deaths/" + bf.curCharacter + "/death")))
 			soundPath = Paths.sound("deaths/" + bf.curCharacter + "/death");
 
 		var soundThing = FlxG.sound.play(soundPath);
@@ -122,7 +123,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		{
 			var soundPath = Paths.music("deaths/bf-dead/loop");
 
-			if(Assets.exists(Paths.music("deaths/" + bf.curCharacter + "/loop")))
+			if(ModAssets.exists(Paths.music("deaths/" + bf.curCharacter + "/loop")))
 				soundPath = Paths.music("deaths/" + bf.curCharacter + "/loop");
 
 			FlxG.sound.playMusic(soundPath);
@@ -146,7 +147,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 			var soundPath = Paths.music("deaths/bf-dead/retry");
 
-			if(Assets.exists(Paths.music("deaths/" + bf.curCharacter + "/retry")))
+			if(ModAssets.exists(Paths.music("deaths/" + bf.curCharacter + "/retry")))
 				soundPath = Paths.music("deaths/" + bf.curCharacter + "/retry");
 
 			FlxG.sound.play(soundPath);

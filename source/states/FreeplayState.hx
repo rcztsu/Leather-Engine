@@ -1,5 +1,6 @@
 package states;
 
+import modding.ModAssets;
 import flixel.util.FlxTimer;
 import substates.ResetScoreSubstate;
 #if discord_rpc
@@ -390,18 +391,39 @@ class FreeplayState extends MusicBeatState
 			{
 				destroyFreeplayVocals();
 
-				if(Assets.exists(Paths.voices(songs[curSelected].songName.toLowerCase(), curDiffString)))
+				if(ModAssets.exists(Paths.voices(songs[curSelected].songName.toLowerCase(), curDiffString)))
+				{
+					#if sys
+					vocals = new FlxSound().loadEmbedded(ModAssets.get_sound(Paths.voices(songs[curSelected].songName.toLowerCase(), curDiffString.toLowerCase())));
+					#else
 					vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName.toLowerCase(), curDiffString));
+					#end
+
+					vocals.persist = false;
+					vocals.looped = true;
+					vocals.volume = 0.7;
+
+					FlxG.sound.list.add(vocals);
+				}
 				else
 					vocals = new FlxSound();
 
-				FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName.toLowerCase(), curDiffString), 0.7);
+				#if sys
+				if(FlxG.sound.music != null)
+					FlxG.sound.music.destroy();
+			
+				FlxG.sound.music = new FlxSound().loadEmbedded(ModAssets.get_sound(Paths.inst(songs[curSelected].songName.toLowerCase(), curDiffString.toLowerCase())));
+				FlxG.sound.music.volume = 0.7;
+				FlxG.sound.music.persist = false;
+				FlxG.sound.music.looped = true;
 
-				FlxG.sound.list.add(vocals);
+				FlxG.sound.list.add(FlxG.sound.music);
+				#else
+				FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName.toLowerCase(), curDiffString), 0.7);
+				#end
+
+				FlxG.sound.music.play();
 				vocals.play();
-				vocals.persist = true;
-				vocals.looped = true;
-				vocals.volume = 0.7;
 			}
 
 			if(vocals != null && FlxG.sound.music != null && !FlxG.keys.justPressed.ENTER)
@@ -447,7 +469,7 @@ class FreeplayState extends MusicBeatState
 	
 				trace(poop);
 
-				if(Assets.exists(Paths.json("song data/" + songs[curSelected].songName.toLowerCase() + "/" + poop)))
+				if(ModAssets.exists(Paths.json("song data/" + songs[curSelected].songName.toLowerCase() + "/" + poop)))
 				{
 					PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
 					PlayState.isStoryMode = false;
@@ -458,7 +480,7 @@ class FreeplayState extends MusicBeatState
 					PlayState.storyWeek = songs[curSelected].week;
 					trace('CUR WEEK' + PlayState.storyWeek);
 
-					if(Assets.exists(Paths.inst(PlayState.SONG.song, PlayState.storyDifficultyStr)))
+					if(ModAssets.exists(Paths.inst(PlayState.SONG.song, PlayState.storyDifficultyStr)))
 					{
 						if(colorTween != null)
 							colorTween.cancel();
@@ -470,7 +492,7 @@ class FreeplayState extends MusicBeatState
 					}
 					else
 					{
-						if(Assets.exists(Paths.inst(songs[curSelected].songName.toLowerCase(), curDiffString)))
+						if(ModAssets.exists(Paths.inst(songs[curSelected].songName.toLowerCase(), curDiffString)))
 							Application.current.window.alert(PlayState.SONG.song.toLowerCase() + " (JSON) != " + songs[curSelected].songName.toLowerCase() + " (FREEPLAY)\nTry making them the same.",
 						"Leather Engine's No Crash, We Help Fix Stuff Tool");
 						else
@@ -531,7 +553,14 @@ class FreeplayState extends MusicBeatState
 		// Song Inst
 		if(utilities.Options.getData("freeplayMusic"))
 		{
+			#if sys
+			FlxG.sound.music.destroy();
+
+			FlxG.sound.music = new FlxSound().loadEmbedded(ModAssets.get_sound(Paths.inst(songs[curSelected].songName, curDiffString.toLowerCase())));
+			FlxG.sound.music.volume = 0.7;
+			#else
 			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName, curDiffString.toLowerCase()), 0.7);
+			#end
 
 			if(vocals.active && vocals.playing)
 				vocals.stop();
@@ -634,6 +663,15 @@ class FreeplayState extends MusicBeatState
 
 		FlxG.sound.music = null;
 	}
+
+	#if sys
+	override public function destroy()
+	{
+		modding.ModAssets.clear_caches();
+
+		super.destroy();
+	}
+	#end
 }
 
 class SongMetadata

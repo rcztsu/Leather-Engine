@@ -1,8 +1,11 @@
 package modding;
 
-#if polymod
-import polymod.Polymod;
+#if sys
+/**
+	The class responsible for storing the mods that are enabled.
 
+	It's also the class that stores them into save data.
+**/
 class ModList
 {
 	public static var modList:Map<String, Bool> = new Map<String, Bool>();
@@ -14,6 +17,8 @@ class ModList
 		modList.set(mod, enabled);
 
 		utilities.Options.setData(modList, "modlist", "modlist");
+
+		ModHandler.load_all();
 	}
 
 	public static function getModEnabled(mod:String):Bool
@@ -24,8 +29,13 @@ class ModList
 		return modList.get(mod);
 	}
 
-    public static function getActiveMods(modsToCheck:Array<String>):Array<String>
+    public static function getActiveMods(?modsToCheck:Null<Array<String>>):Array<String>
     {
+		#if sys
+		if(modsToCheck == null)
+			modsToCheck = sys.FileSystem.readDirectory(Sys.getCwd() + "mods/");
+		#end
+
         var activeMods:Array<String> = [];
 
         for(modName in modsToCheck)
