@@ -1134,7 +1134,7 @@ class ModchartUtilities
         Lua_helper.add_callback(lua, "createSound", function(id:String, file_Path:String, library:String, ?looped:Bool = false) {
             if(lua_Sounds.get(id) == null)
             {
-                lua_Sounds.set(id, new FlxSound().loadEmbedded(Paths.sound(file_Path, library), looped));
+                lua_Sounds.set(id, new FlxSound().loadEmbedded(ModAssets.get_sound(Paths.sound(file_Path, library)), looped));
 
                 FlxG.sound.list.add(lua_Sounds.get(id));
             }

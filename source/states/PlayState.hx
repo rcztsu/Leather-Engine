@@ -4617,7 +4617,8 @@ class PlayState extends MusicBeatState
 	#if sys
 	override public function destroy()
 	{
-		modding.ModAssets.clear_caches();
+		if(health > minHealth)
+			modding.ModAssets.clear_caches();
 
 		super.destroy();
 	}

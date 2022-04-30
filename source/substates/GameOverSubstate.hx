@@ -23,6 +23,8 @@ class GameOverSubstate extends MusicBeatSubstate
 	var bf:Character;
 	var camFollow:FlxObject;
 
+	var pressed_escape:Bool = false;
+
 	public function new(x:Float, y:Float)
 	{
 		super();
@@ -82,6 +84,8 @@ class GameOverSubstate extends MusicBeatSubstate
 		if (controls.BACK)
 		{
 			FlxG.sound.music.stop();
+
+			pressed_escape = true;
 
 			#if linc_luajit
 			if (PlayState.luaModchart != null)
