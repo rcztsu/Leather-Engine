@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Leather Engine" file="Leather Engine" packageName="com.leather128.funkin" package="com.leather128.funkin" main="Main" version="0.4.1" company="leather128" unless="vsync"/>
+	<app title=her "FNF LEATHER ENGINE" file="FNF LEATHER ENGINE" packageName="com.leather-funkin.fnf" package="com.leather-funkin.fnf" main="Main" version="0.4.1" company="leather128" unless="vsync"/>
 	<app title="Leather Engine" file="Leather Engine" packageName="com.leather128.funkin" package="com.leather128.funkin" main="Main" version="0.4.1" company="leather128" if="vsync"/>
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
